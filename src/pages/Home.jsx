@@ -1,66 +1,59 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Container from "../components/Container";
 import { ThemeContext } from "../contexts/ThemeContext";
-import Button from "../components/Button";
 import Hero1 from "../images/hero1.webp";
 import Hero2 from "../images/hero2.webp";
 import Hero3 from "../images/hero3.webp";
 import Hero4 from "../images/hero4.webp";
-import {
-   Select,
-   SelectContent,
-   SelectItem,
-   SelectTrigger,
-   SelectValue,
-} from "@/components/ui/select";
+import { Link } from "react-router-dom";
 
 function Home() {
    const { theme } = useContext(ThemeContext);
-   const products = [
-      {
-         id: 1,
-         img: "https://picsum.photos/300/200",
-         name: "Avant-Garde Lamp",
-         price: 179.99,
-         currency: "$",
-      },
-      {
-         id: 2,
-         img: "https://picsum.photos/300/200",
-         name: "Coffee Table",
-         price: 179.99,
-         currency: "$",
-      },
-      {
-         id: 3,
-         img: "https://picsum.photos/300/200",
-         name: "Comfy bed",
-         price: 129.99,
-         currency: "$",
-      },
-   ];
-   const mappedProducts = products.map((product, index) => {
-      return (
-         <div
-            key={product.id}
-            className={`text-center rounded-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 border-solid border px-4 py-4 cursor-pointer ${
-               theme == "light"
-                  ? "shadow-black bg-gray-50"
-                  : "shadow-white bg-slate-900 border-none"
-            }`}
-         >
-            <img
-               className={`rounded-xl`}
-               src={product.img}
-               alt={product.name}
-            />
-            <h3 className={`text-xl font-semibold mt-8 mb-2`}>
-               {product.name}
-            </h3>
-            <h4 className={``}>{product.price}</h4>
-         </div>
-      );
-   });
+   const BASE_URL = import.meta.env.VITE_BASE_URL;
+   console.log(BASE_URL);
+   const [featuredProducts, setFeaturedProducts] = useState([]);
+   useEffect(() => {
+      fetch(`${BASE_URL}api/products`)
+         .then((res) => res.json())
+         .then((json) => setFeaturedProducts(json.data))
+         .catch((err) => {
+            console.error(err);
+         });
+   }, []);
+   useEffect(() => {
+      console.log(featuredProducts);
+   }, [featuredProducts]);
+   const mappedProducts = featuredProducts
+      .slice(0, 3)
+      .map((product, index) => {
+         let { price, image, title } = product.attributes;
+         price = price.toString();
+         price = price.slice(0, -2) + "." + price.slice(-2);
+         return (
+            <div
+               key={product.id}
+               className={`text-center rounded-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 border-solid border px-4 py-4 cursor-pointer ${
+                  theme == "light"
+                     ? "shadow-black bg-gray-50"
+                     : "shadow-white bg-slate-900 border-none"
+               }`}
+            >
+               <img
+                  className={`rounded-xl w-72 h-52 object-cover`}
+                  src={image}
+                  alt={title}
+               />
+               <h3
+                  className={`text-xl font-semibold mt-8 mb-2 capitalize`}
+               >
+                  {title}
+               </h3>
+               <h4 className={`text-blue-700 text-xl font-semibold`}>
+                  {price}
+               </h4>
+            </div>
+         );
+      });
    return (
       <>
          <Container
@@ -84,15 +77,18 @@ function Home() {
                   temporibus asperiores aut obcaecati perferendis
                   porro nobis.
                </p>
-               <Button
-                  classes={`text-lg mt-12 transition-all duration-300 ${
-                     theme == "light"
-                        ? `text-slate-200 hover:bg-blue-700 bg-blue-600`
-                        : `text-slate-700 bg-pink-300 hover:bg-pink-400`
-                  }`}
-               >
-                  Our products
-               </Button>
+               <div className="mt-12">
+                  <Link
+                     to="/products"
+                     className={`rounded-lg px-4 py-2 text-lg transition-all duration-300 ${
+                        theme == "light"
+                           ? `text-slate-200 hover:bg-blue-700 bg-blue-600`
+                           : `text-slate-700 bg-pink-300 hover:bg-pink-400`
+                     }`}
+                  >
+                     Our products
+                  </Link>
+               </div>
             </div>
             <div className="hero-scroll w-76 min-h-96 py-4 px-4 bg-slate-700 rounded-2xl flex overflow-x-scroll gap-4">
                <img
@@ -148,16 +144,6 @@ function Home() {
                   {mappedProducts}
                </div>
             </div>
-            <Select>
-               <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Theme" />
-               </SelectTrigger>
-               <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
-               </SelectContent>
-            </Select>
          </Container>
       </>
    );

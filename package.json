@@ -10,13 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
     "@radix-ui/colors": "^3.0.0",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/themes": "^2.0.3",
-    "@teovilla/shadcn-ui-react": "^0.5.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "framer-motion": "^10.16.16",
     "localforage": "^1.10.0",
     "lucide-react": "^0.300.0",
     "match-sorter": "^6.3.1",
@@ -25,7 +28,8 @@
     "react-router-dom": "^6.21.0",
     "sort-by": "^0.0.2",
     "tailwind-merge": "^2.2.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "vite-plugin-svgr": "^4.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

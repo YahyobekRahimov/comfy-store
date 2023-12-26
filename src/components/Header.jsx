@@ -21,10 +21,10 @@ export default function Header() {
                      : "text-slate-200"
                }`}
             >
-               <Link className="hover:underline" to="login">
+               <Link className="hover:underline" to="/login">
                   Sing in / Guest
                </Link>
-               <Link className="hover:underline" to="register">
+               <Link className="hover:underline" to="/register">
                   Create Account
                </Link>
             </Container>
