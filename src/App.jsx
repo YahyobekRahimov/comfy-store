@@ -10,6 +10,7 @@ import Products from "./pages/Products";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { useLocation } from "react-router-dom";
+import Product from "./pages/Product";
 
 function App() {
    const { pathname } = useLocation();
@@ -35,6 +36,7 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/products/:id" element={<Product />} />
          </Routes>
       </ThemeContext.Provider>
    );

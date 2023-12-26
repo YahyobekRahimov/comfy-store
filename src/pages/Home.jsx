@@ -5,13 +5,15 @@ import Hero1 from "../images/hero1.webp";
 import Hero2 from "../images/hero2.webp";
 import Hero3 from "../images/hero3.webp";
 import Hero4 from "../images/hero4.webp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Home() {
+   const navigate = useNavigate();
    const { theme } = useContext(ThemeContext);
    const BASE_URL = import.meta.env.VITE_BASE_URL;
-   console.log(BASE_URL);
    const [featuredProducts, setFeaturedProducts] = useState([]);
+
+   // Fetching the products
    useEffect(() => {
       fetch(`${BASE_URL}api/products`)
          .then((res) => res.json())
@@ -20,18 +22,47 @@ function Home() {
             console.error(err);
          });
    }, []);
-   useEffect(() => {
-      console.log(featuredProducts);
-   }, [featuredProducts]);
+
+   //  This function deals with the passing the data related to the clicked product
+   function handleProductClick(params) {
+      const { id } = params;
+      navigate(`/products/${id}`, { state: { params: params } });
+   }
+
+   //  Mapping all the featured product cards
+
    const mappedProducts = featuredProducts
       .slice(0, 3)
-      .map((product, index) => {
-         let { price, image, title } = product.attributes;
+      .map((product) => {
+         let {
+            price,
+            image,
+            title,
+            description,
+            colors,
+            shipping,
+            company,
+            category,
+         } = product.attributes;
+         let id = product.id;
          price = price.toString();
          price = price.slice(0, -2) + "." + price.slice(-2);
          return (
             <div
-               key={product.id}
+               onClick={() =>
+                  handleProductClick({
+                     image,
+                     title,
+                     price,
+                     description,
+                     colors,
+                     shipping,
+                     company,
+                     category,
+                     id,
+                  })
+               }
+               key={id}
                className={`text-center rounded-xl transition-all duration-300 hover:shadow-2xl hover:scale-105 border-solid border px-4 py-4 cursor-pointer ${
                   theme == "light"
                      ? "shadow-black bg-gray-50"
@@ -49,7 +80,7 @@ function Home() {
                   {title}
                </h3>
                <h4 className={`text-blue-700 text-xl font-semibold`}>
-                  {price}
+                  ${price}
                </h4>
             </div>
          );
