@@ -10,12 +10,11 @@ import { Link, useNavigate } from "react-router-dom";
 function Home() {
    const navigate = useNavigate();
    const { theme } = useContext(ThemeContext);
-   const BASE_URL = import.meta.env.VITE_BASE_URL;
    const [featuredProducts, setFeaturedProducts] = useState([]);
 
    // Fetching the products
    useEffect(() => {
-      fetch(`${BASE_URL}api/products`)
+      fetch(`https://strapi-store-server.onrender.com/api/products`)
          .then((res) => res.json())
          .then((json) => setFeaturedProducts(json.data))
          .catch((err) => {

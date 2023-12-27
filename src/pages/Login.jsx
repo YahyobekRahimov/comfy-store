@@ -36,7 +36,7 @@ function Login() {
       }
       try {
          const res = await fetch(
-            `${import.meta.env.VITE_BASE_URL}api/auth/local`,
+            `https://strapi-store-server.onrender.com/api/auth/local`,
             {
                method: "POST",
                headers: {

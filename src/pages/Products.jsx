@@ -31,7 +31,9 @@ function Products() {
       setCardLayout(value);
    }
    useEffect(() => {
-      fetch(`${import.meta.env.VITE_BASE_URL}api/products?page=1`)
+      fetch(
+         `https://strapi-store-server.onrender.com/api/products?page=1`
+      )
          .then((res) => res.json())
          .then((json) => setData(json))
          .catch((err) => {

@@ -34,7 +34,7 @@ function Register() {
          return;
       }
       fetch(
-         `${import.meta.env.VITE_BASE_URL}api/auth/local/register`,
+         `https://strapi-store-server.onrender.com/api/auth/local/register`,
          {
             method: "POST",
             headers: {
