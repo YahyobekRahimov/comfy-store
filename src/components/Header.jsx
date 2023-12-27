@@ -7,7 +7,11 @@ import { Button } from "@chakra-ui/react";
 
 export default function Header() {
    const location = useLocation();
-   const [user, setUser] = useState(location.state.user);
+   try {
+      const [user, setUser] = useState(location.state.user);
+   } catch (error) {
+      console.log(error);
+   }
    const [loggedIn, setLoggedIn] = useState(false);
    const { theme, toggleTheme } = useContext(ThemeContext);
    if (location.state.user) {
