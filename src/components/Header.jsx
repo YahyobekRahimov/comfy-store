@@ -7,8 +7,6 @@ import Container from "./Container";
 export default function Header() {
    const location = useLocation();
    const { theme, toggleTheme } = useContext(ThemeContext);
-   if (location.state.user) {
-   }
    return (
       <header>
          <section
