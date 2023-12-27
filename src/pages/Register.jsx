@@ -2,7 +2,7 @@ import { Input } from "@chakra-ui/react";
 import { useContext, useState, useEffect } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { Button } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import {
    Alert,
@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 
 function Register() {
+   const navigate = useNavigate();
    const [hasError, setHasError] = useState("");
    const [response, setResponse] = useState({});
    const [success, setSuccess] = useState(false);
@@ -28,13 +29,12 @@ function Register() {
          username,
          password,
       };
-      console.log("data", data);
       if (!email || !username || !password) {
          setHasError("Iltimos ma'lumotlarni kiriting");
          return;
       }
       fetch(
-         "https://strapi-store-server.onrender.com/api/auth/local/register",
+         `${import.meta.env.VITE_BASE_URL}api/auth/local/register`,
          {
             method: "POST",
             headers: {
@@ -60,6 +60,9 @@ function Register() {
       }
       if (response.user.confirmed) {
          setSuccess(true);
+         setTimeout(() => {
+            navigate("/login");
+         }, 1800);
       }
    }, [response]);
    return (
