@@ -1,9 +1,10 @@
 import { useLocation } from "react-router-dom";
 import Container from "../components/Container";
 import { Select } from "@chakra-ui/react";
-import { ThemeContext } from "@emotion/react";
+import { ThemeContext } from "../contexts/ThemeContext";
 import { useContext } from "react";
 import { Button } from "@chakra-ui/react";
+import { useState } from "react";
 
 function Product() {
    const { theme } = useContext(ThemeContext);
@@ -18,12 +19,26 @@ function Product() {
       company,
       shipping,
    } = location.state.params;
+   const [selectedColor, setSelectedColor] = useState(colors[0]);
    let nums = [];
    for (let i = 1; i <= 20; i++) {
       nums.push(i);
    }
+   const optionsStyles =
+      theme == "light"
+         ? { backgroundColor: "white" }
+         : { backgroundColor: "#475569" };
+   function handleColorClick(color) {
+      setSelectedColor(color);
+   }
    return (
-      <Container classes={`flex mt-24 gap-14`}>
+      <Container
+         classes={`flex pt-24 pb-20 gap-14 ${
+            theme == "light"
+               ? "text-slate-700 bg-white"
+               : "text-slate-200 bg-slate-800"
+         }`}
+      >
          <img
             src={image}
             alt={title}
@@ -45,8 +60,13 @@ function Product() {
                {colors.map((color, index) => (
                   <div
                      key={index}
-                     className="w-6 h-6 rounded-full cursor-pointer mb-5"
+                     className={`w-6 h-6 rounded-full cursor-pointer mb-5 ${
+                        color == selectedColor
+                           ? "outline outline-4 outline-blue-100"
+                           : "outline-none"
+                     }`}
                      style={{ backgroundColor: `${color}` }}
+                     onClick={() => handleColorClick(color)}
                   ></div>
                ))}
             </div>
@@ -65,13 +85,17 @@ function Product() {
                   }
                >
                   {nums.map((num, index) => (
-                     <option key={index} value={num}>
+                     <option
+                        key={index}
+                        value={num}
+                        style={optionsStyles}
+                     >
                         {num}
                      </option>
                   ))}
                </Select>
             </div>
-            <Button className="w-1/6" colorScheme="purple">
+            <Button className="w-max" colorScheme="purple">
                ADD TO BAG
             </Button>
          </div>

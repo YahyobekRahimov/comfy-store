@@ -18,12 +18,15 @@ import {
 } from "@chakra-ui/react";
 import SquareLayout from "../icons/grid.svg?react";
 import MenuLayout from "../icons/menu-layout.svg?react";
+import { useNavigate } from "react-router-dom";
 
 function Products() {
    const [price, setPrice] = useState(1500);
    const [cardLayout, setCardLayout] = useState("grid");
    const { theme } = useContext(ThemeContext);
    const [data, setData] = useState({});
+   const navigate = useNavigate();
+   const BASE_URL = import.meta.env.VITE_BASE_URL;
    function toggleCardLayout(value) {
       setCardLayout(value);
    }
@@ -42,6 +45,25 @@ function Products() {
       theme == "light"
          ? { backgroundColor: "white" }
          : { backgroundColor: "#475569" };
+   function handleProductClick(params) {
+      const {
+         image,
+         title,
+         price,
+         description,
+         colors,
+         shipping,
+         company,
+         category,
+         id,
+      } = params;
+      console.log(params);
+      navigate(`/products/${id}`, {
+         state: {
+            params: params,
+         },
+      });
+   }
    return (
       <>
          <Container
@@ -118,6 +140,8 @@ function Products() {
                         }
                         id="brands"
                      >
+                        {/* Mapping the filter for companies */}
+
                         {companies.map((category, index) => {
                            return (
                               <option
@@ -143,6 +167,8 @@ function Products() {
                                 }
                         }
                      >
+                        {/* Mapping categories for filter */}
+
                         {sortByCategories.map((category, index) => {
                            return (
                               <option
@@ -270,13 +296,35 @@ function Products() {
             >
                {data.data &&
                   data.data.map((product, index) => {
-                     console.log(product);
-                     let { title, price, image } = product.attributes;
+                     let {
+                        image,
+                        title,
+                        price,
+                        description,
+                        colors,
+                        shipping,
+                        company,
+                        category,
+                        id,
+                     } = product.attributes;
                      price = price.toString();
                      price =
                         price.slice(0, -2) + "." + price.slice(-2);
                      return (
                         <li
+                           onClick={() =>
+                              handleProductClick({
+                                 image,
+                                 title,
+                                 price,
+                                 description,
+                                 colors,
+                                 shipping,
+                                 company,
+                                 category,
+                                 id,
+                              })
+                           }
                            key={index}
                            className={`text-center p-5 pb-10 flex flex-col items-center gap-4 rounded-2xl hover:scale-105 transition-all duration-300 cursor-pointer
                            ${
@@ -294,7 +342,7 @@ function Products() {
                               src={image}
                               alt={title}
                            />
-                           <h4 className="mt-3 font-bold text-2xl">
+                           <h4 className="mt-3 font-bold text-2xl capitalize">
                               {title}
                            </h4>
                            <h5
