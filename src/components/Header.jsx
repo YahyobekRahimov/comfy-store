@@ -1,22 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import * as Switch from "@radix-ui/react-switch";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import Container from "./Container";
-import { Button } from "@chakra-ui/react";
 
 export default function Header() {
    const location = useLocation();
-   try {
-      const [user, setUser] = useState(location.state.user);
-   } catch (error) {
-      console.log(error);
-   }
-   const [loggedIn, setLoggedIn] = useState(false);
    const { theme, toggleTheme } = useContext(ThemeContext);
    if (location.state.user) {
-      setLoggedIn(true);
-      delete location.state.user;
    }
    return (
       <header>
@@ -32,27 +23,12 @@ export default function Header() {
                      : "text-slate-200"
                }`}
             >
-               {loggedIn ? (
-                  <div className="flex items-center gap-5">
-                     <span>Hello, {user.username}</span>
-                     <Button
-                        colorScheme="blue"
-                        size="sm"
-                        onClick={() => setLoggedIn(false)}
-                     >
-                        Log out
-                     </Button>
-                  </div>
-               ) : (
-                  <>
-                     <Link className="hover:underline" to="/login">
-                        Sing in / Guest
-                     </Link>
-                     <Link className="hover:underline" to="/register">
-                        Create Account
-                     </Link>
-                  </>
-               )}
+               <Link className="hover:underline" to="/login">
+                  Sing in / Guest
+               </Link>
+               <Link className="hover:underline" to="/register">
+                  Create Account
+               </Link>
             </Container>
          </section>
          <section
